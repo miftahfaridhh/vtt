@@ -102,7 +102,6 @@ class GoogleSpeechToTextController extends Controller
             $config->setEnableAutomaticPunctuation(true)
                 ->setUseEnhanced(true)
                 ->setLanguageCode('id-ID')
-                ->setModel('phone_call')
                 ->setAudioChannelCount(1);
                 //->setEnableSeparateRecognitionPerChannel(true);
             // create recognition audio from google cloud storage url
