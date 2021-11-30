@@ -52,37 +52,7 @@ class GoogleSpeechToTextController extends Controller
          * If we didn't receive flac, convert to flac
          */
         if ($fileFormat != 'flac') {
-
-            // // rest7.com has a free audio web conversion service
-            // $url = 'http://api.rest7.com/v1/sound_convert.php?format=flac';
-            // $input = file_get_contents($file);
-            // $data = json_decode(_uploadFile7($url, $input, $file->getFilename()));
-            
-            // if ($data->success == 1) { // request was successful
-            //     $filePath = $data->file;
-            //     $fileContent = file_get_contents($filePath); // download file
-            // }
-
-            // change these variables if necessary
-            $sampleRateHertz = config('common.sample-rate-hertz');
-            //convert audio to extension .FLAC
-            $audioFile = $_FILES['file']['tmp_name'];
-            
-            //create tmp folder in system
-            $upload_dir = sys_get_temp_dir();
-            //create tmp path in system
-            $audioFilePath = $upload_dir . "/" . time() . ".mp3";
-            //move file uploaded to tmp folder system
-            move_uploaded_file($audioFile, $audioFilePath);
-            
-            $format = new Audio\flac();
-            $format->setAudioKiloBitrate($sampleRateHertz);
-            $audioFileFormatPath = $upload_dir . "/" . time() . ".flac";
-            $audioFormat— > save($format, $audioFileFormatPath);
-            // get contents of a file into a string
-
-            $fileContent = file_get_contents($audioFileFormatPath);
-
+            $fileContent = file_get_contents($file);
         } else {
             $fileContent = file_get_contents($file);
         }
