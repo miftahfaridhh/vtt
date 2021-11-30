@@ -17,7 +17,7 @@ use Google\Cloud\Speech\V1p1beta1\SpeechRecognitionAlternative;
 use Google\Cloud\Speech\V1p1beta1\SpeechRecognitionResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use FFMpeg\FFMpeg;
+
 
 include 'rest7.php';
 
@@ -67,14 +67,14 @@ class GoogleSpeechToTextController extends Controller
             $sampleRateHertz = config('common.sample-rate-hertz');
             //convert audio to extension .FLAC
             $audioFile = $_FILES['file']['tmp_name'];
-            $ffmpeg = FFMpeg::create();
+            
             //create tmp folder in system
             $upload_dir = sys_get_temp_dir();
             //create tmp path in system
             $audioFilePath = $upload_dir . "/" . time() . ".mp3";
             //move file uploaded to tmp folder system
             move_uploaded_file($audioFile, $audioFilePath);
-            $audioFormat = $ffmpeg->open($audioFilePath);
+            
             $format = new Audio\flac();
             $format->setAudioKiloBitrate($sampleRateHertz);
             $audioFileFormatPath = $upload_dir . "/" . time() . ".flac";
