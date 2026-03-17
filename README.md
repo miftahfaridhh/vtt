@@ -101,6 +101,20 @@ Open `http://localhost:8000` in your browser.
 
 > **Note:** The application is configured for Bahasa Indonesia by default. To support other languages, update the `languageCode` field in `app/Http/Controllers/GoogleSpeechToTextController.php`.
 
+## Security
+
+**Never commit credentials to this repository.** The following are ignored via `.gitignore`:
+
+| Path | Description |
+|---|---|
+| `.env` | Application secrets and API keys |
+| `private/` | GCP service account JSON key folder |
+| `google-credential/` | Any credential directory |
+| `*service_account*.json` | GCP service account key files |
+| `*credentials*.json` | Any credentials JSON file |
+
+Always store your GCP service account key outside the repository root, or use environment variables / a secrets manager in production.
+
 ## Deployment
 
 This project includes a `Procfile` for **Heroku** deployment. Ensure all environment variables are configured in your Heroku config vars before deploying.
