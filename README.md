@@ -1,72 +1,110 @@
-# Google Cloud Speech-To-Text Sample
+# VTT — Voice-to-Text Transcription App
 
-## Background
-Google Cloud's [Speech-To-Text API](https://cloud.google.com/speech-to-text/) let's you transcribe audio files into text
-using machine learning and Artificial intelligence. This is a simple sample web-page consuming that API as a service.
+A web-based speech-to-text transcription application that leverages **Google Cloud Speech-to-Text API** to convert audio files into text. Built with Laravel and optimized for **Bahasa Indonesia** audio transcription.
 
-## Example
-You can find an example project running at [http://joeydalu.herokuapp.com/samples/googlespeech](http://joeydalu.herokuapp.com/samples/googlespeech)
-- Please use files less than **700kb**.
+![Laravel](https://img.shields.io/badge/Laravel-5.6-FF2D20?logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-7.1%2B-777BB4?logo=php&logoColor=white)
+![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Speech%20API-4285F4?logo=google-cloud&logoColor=white)
+![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D?logo=vue.js&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## Technologies
-The entire project is a PHP web-app built using the [Laravel]() framework. This project also uses:
-- Google Cloud Platform
-    - [Google Speech-To-Text API](https://cloud.google.com/speech-to-text/): For transcribing audio files to text
-    - [Google Cloud Storage](https://cloud.google.com/storage/): For storing audio files prior to transcription. We use this to serve files to the API
-    
-- Rest7 (Free Web Services)
-    - [Sound Convert API](http://rest7.com/sound_convert): For converting files into _wav_ format as Google's Speech API [only works with a few audio formats and codecs](https://cloud.google.com/speech-to-text/docs/encoding).
-    
+---
+
+## Features
+
+- Upload audio files (FLAC format) via a clean web interface
+- Transcription using Google Cloud Speech-to-Text API with async long-running operations
+- Optimized for **Bahasa Indonesia** (`id-ID`) with automatic punctuation enabled
+- Audio file storage via **Google Cloud Storage**
+- Bootstrap-based responsive dashboard UI
+- FFmpeg integration for audio processing
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | Laravel 5.6, PHP 7.1+ |
+| Frontend | Vue.js, Bootstrap 4, Axios, jQuery |
+| Cloud | Google Cloud Speech-to-Text API, Google Cloud Storage |
+| Audio | PHP-FFmpeg, CloudConvert |
+| Build | Laravel Mix (Webpack) |
+
+## Requirements
+
+- PHP >= 7.1.3
+- Composer
+- Node.js & npm/yarn
+- Google Cloud Platform account with:
+  - Cloud Speech-to-Text API enabled
+  - Cloud Storage bucket
+  - Service account with Project > Owner role
 
 ## Installation
-The project is easy to setup provided you have all the requirements. See below and yonder.
 
-### Requirements
+### 1. Clone & Install Dependencies
 
-#### Google Cloud Platform account: 
-- Visit your [Google Cloud Console](https://console.cloud.google.com/). You can create an account if you don't already have one. If you already have an account, you can 
-easily just sign-in with it to start using the service.
-- [Create a new project](https://console.cloud.google.com/projectcreate). You can name it anything, it doesn't matter.
-- Enable the **Cloud Speech API** under [API's and Services](https://console.cloud.google.com/apis/library). 
-- Finally, [create a Google Storage bucket](https://console.cloud.google.com/storage/create-bucket) for your application. You can also just use an existing one. 
+```bash
+git clone https://github.com/miftahfaridhh/vtt.git
+cd vtt
+composer install
+npm install
+```
 
-#### Laravel PHP:
-- Follow [this link](https://laravel.com/docs/5.6/installation) to install laravel on your pc if you don't have it.
+### 2. Configure Environment
 
-#### Source Code:
-Just clone this to your preferred directory, maybe via git? 
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-`git clone https://github.com/josephdalughut/speechtotext.git`
+Edit `.env` and set your Google Cloud credentials:
 
-### Setup
+```env
+DB_DATABASE=vtt
+DB_USERNAME=root
+DB_PASSWORD=
 
-#### 1. Google Project Access
-- cd into the project directory and run `composer install` to install any dependencies required by the project which you don't have yet.
-- Follow the instructions [here](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances) to create a new **Service Account** for yout Google Cloud Project.
-Make sure to make the account a **Project** > **Owner**. It should download a *json-key* file which you'll use in the next step.
-- Place the downloaded `.json` file in the *private* folder at the root level of the application source code. If the folder doesn't exist, 
-you can just create it.
-- Rename the json file to *gcp_service_account.json*
+GOOGLE_APPLICATION_CREDENTIALS=../private/gcp_service_account.json
+GOOGLE_APPLICATION_PROJECT_ID=your-gcp-project-id
+GOOGLE_CLOUD_STORAGE_BUCKET=your-bucket-name
+```
 
+### 3. Google Cloud Setup
 
-#### 2. `.env` File
-- Rename the **.env.example** file contained in the root folder to **.env**
-- Add the following environment variables to the bottom of the file:
-    - GOOGLE_APPLICATION_CREDENTIALS=../private/gcp_service_account.json
-    - GOOGLE_APPLICATION_PROJECT_ID=*your Google cloud project ID*
-    (you can find this *Project ID* on the dashboard of your Google Cloud Console)
-    - GOOGLE_CLOUD_STORAGE_BUCKET=*your Google cloud storage bucket name*
-    
-#### 3. Run the Web-app
-Once you're done with all the setup above, it's time to run your application:
-- run `php artisan serve` to start serving the application.
-- Open your web-browser and navigate to `localhost:8000` to test out the application.
+1. Create a [Google Cloud project](https://console.cloud.google.com/projectcreate)
+2. Enable the **Cloud Speech-to-Text API** in [APIs & Services](https://console.cloud.google.com/apis/library)
+3. Create a [Cloud Storage bucket](https://console.cloud.google.com/storage/create-bucket)
+4. Create a [Service Account](https://console.cloud.google.com/iam-admin/serviceaccounts) with **Project > Owner** role and download the JSON key
+5. Place the JSON key at `private/gcp_service_account.json`
 
+### 4. Run Migrations & Build Assets
 
-## Other
-- This project was a sample to show someone, chances are it won't be maintained.
-- Feel free to fork, download, do anything with it really.
+```bash
+php artisan migrate
+npm run dev
+```
 
-## Alternative API's
-- Checkout [Deepgram](https://deepgram.com/). Their transcriptions seem better than Google's,
-brace yourself however, for crap documentation ლ(ಠ_ಠლ).
+### 5. Serve
+
+```bash
+php artisan serve
+```
+
+Open `http://localhost:8000` in your browser.
+
+## Usage
+
+1. Navigate to the home page
+2. Upload a FLAC audio file (max 100MB)
+3. Submit the form and wait for transcription
+4. The transcribed text will be displayed on the results page
+
+> **Note:** The application is configured for Bahasa Indonesia by default. To support other languages, update the `languageCode` field in `app/Http/Controllers/GoogleSpeechToTextController.php`.
+
+## Deployment
+
+This project includes a `Procfile` for **Heroku** deployment. Ensure all environment variables are configured in your Heroku config vars before deploying.
+
+## License
+
+This project is open-sourced under the [MIT License](LICENSE).
